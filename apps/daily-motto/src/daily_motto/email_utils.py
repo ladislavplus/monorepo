@@ -1,32 +1,33 @@
 import os
-from dotenv import load_dotenv
-from sib_api_v3_sdk import ApiClient, Configuration, TransactionalEmailsApi, SendSmtpEmail
-from sib_api_v3_sdk.rest import ApiException
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from daily_motto.env_utils import load_env
+load_env()
 
-# Load environment
-dotenv_path = os.path.join(os.path.dirname(__file__), "..", ".env")
-load_dotenv(dotenv_path)
-
-BREVO_API_KEY = os.getenv("BREVO_API_KEY")
-EMAIL_FROM = os.getenv("EMAIL_FROM")
-
-# Setup Brevo API client
-configuration = Configuration()
-configuration.api_key['api-key'] = BREVO_API_KEY
-api_instance = TransactionalEmailsApi(ApiClient(configuration))
-
+# Send email using SMTP (Gmail example)
 def send_email(to_email: str, subject: str, body: str):
-    send_smtp_email = SendSmtpEmail(
-        to=[{"email": to_email}],
-        sender={"email": EMAIL_FROM},
-        subject=subject,
-        html_content=body  # Can also use "text_content=body" for plain text
-    )
+    # Gmail credentials
+    sender_email = os.getenv('SENDER_EMAIL')
+    sender_password = os.getenv('SENDER_PSW')  # App password, not your real Gmail password
+    
+    # Compose message
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = to_email
+    msg["Subject"] = subject
+    msg.attach(MIMEText(body, "plain"))
+
+    # Send the email via Gmail's SMTP server
     try:
-        response = api_instance.send_transac_email(send_smtp_email)
-        print(f"✅ Email sent to {to_email}, Message ID: {response.message_id}")
-    except ApiException as e:
-        print(f"❌ Error sending email: {e}")
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()  # Secure the connection
+            server.login(sender_email, sender_password)
+            server.send_message(msg)
+            print("✅ Email sent successfully.")
+    except Exception as e:
+        print("❌ Failed to send email:", e)
+
 
 def send_email_dummy(to_email: str, subject: str, body: str):
 # Dummy function for testing

@@ -11,7 +11,7 @@ load_env()
 
 import litellm
 from daily_motto.models import get_db, User, SentHistory, ReminderTemplate
-from daily_motto.email_utils import send_email_dummy  # Use send_email in production
+from daily_motto.email_utils import send_email as send_email  # Use send_email in production
 
 # --- Logging setup ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
@@ -55,7 +55,7 @@ def send_reminders():
                 continue
 
             try:
-                send_email_dummy(user.email, "Your Daily Motivation", reminder_text)
+                send_email(user.email, "Your Daily Motivation", reminder_text)
                 logging.info(f"Email sent to {user.email}")
             except Exception as e:
                 logging.error(f"Failed to send email to {user.email}: {e}")

@@ -2,13 +2,13 @@
 from daily_motto.models import get_db, ReminderTemplate
 
 template_text = (
-    "Generate a short daily motivational reminder for work and fitness, "
+    "Generate a daily motivational mottos for work and fitness, "
     "70% mindset-focused, 30% practical, calm and reflective tone."
 )
 
 session = next(get_db())  # Using next() to get the session from
 # Check if template already exists
-existing = session.query(ReminderTemplate).filter_by(role="mixed").first()
+existing = session.query(ReminderTemplate).filter_by(prompt_text=template_text).first()
 if existing:
         print(f"⚠️ Template already exists: ID {existing.id}")
 else:

@@ -1,3 +1,6 @@
-from email_utils import send_email
+import datetime
+from daily_motto.email_utils import send_email
 
-send_email("zari.zenii@gmail.com", "Test Brevo Email2", "<h1>Hello from Brevo, 2.</h1>")
+if __name__ == "__main__":
+    # Test sending an email
+    send_email("testemail@example.com", "Sending Email Test", "Hello from Daily-Motto. "+datetime.datetime.now().isoformat())
