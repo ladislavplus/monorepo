@@ -12,4 +12,5 @@ authors = [
 dependencies = []        # e.g. ["requests"]
 
 [tool.setuptools.packages.find]
-where = ["."]
+where = ["src"]
+include = ["daily_moto*"]

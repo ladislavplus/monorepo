@@ -1,6 +1,6 @@
 
 from datetime import time
-from src.daily_motto.models import User, get_db
+from daily_motto.models import User, get_db
 
 # Quick test: insert one user
 def test_add_user():

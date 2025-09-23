@@ -1,5 +1,4 @@
 
-
 import os
 import sys
 import random
@@ -7,12 +6,12 @@ from datetime import datetime
 from apscheduler.schedulers.blocking import BlockingScheduler
 import logging
 
-from env_utils import load_env
+from daily_motto.env_utils import load_env
 load_env()
 
 import litellm
-from models import get_db, User, SentHistory, ReminderTemplate
-from email_utils import send_email_dummy  # Use send_email in production
+from daily_motto.models import get_db, User, SentHistory, ReminderTemplate
+from daily_motto.email_utils import send_email_dummy  # Use send_email in production
 
 # --- Logging setup ---
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')

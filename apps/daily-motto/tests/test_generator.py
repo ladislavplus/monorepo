@@ -1,14 +1,11 @@
 import sys
-from dotenv import load_dotenv
+from daily_motto.env_utils import load_env
 from litellm import completion
 import os
 
 prompt = "Generate a short motivational reminder (max 3 lines) for work and fitness, calm and reflective, 70% mindset / 30% practical."
 
-# Load the .env file from one folder up
-dotenv_path = os.path.join(os.path.dirname(__file__), "..", ".env")
-load_dotenv(dotenv_path)
-
+load_env()
 api_key = os.getenv('GROQ_API_KEY')
 if api_key is None:
     print("Upozornění: GROQ_API_KEY nebyl nalezen v souboru .env nebo proměnných prostředí.")

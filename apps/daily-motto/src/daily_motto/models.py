@@ -1,7 +1,9 @@
 
 from datetime import datetime
 import os
-from env_utils import load_env
+from urllib.parse import urlparse
+from daily_motto.env_utils import load_env
+
 from sqlalchemy import (
     create_engine, Column, Integer, String, DateTime, Text, Time, Float, ForeignKey
 )
@@ -46,8 +48,22 @@ class ReminderTemplate(Base):
 load_env()
 db_url = os.getenv("DATABASE_URL")
 if not db_url or not db_url.strip():
-    db_url = "sqlite:///../motivationDB.db"
+    raise ValueError("DATABASE_URL environment variable is not set or empty.")
+
 print("Using DATABASE_URL:", db_url)
+# Parse the path
+parsed = urlparse(db_url)
+db_path = parsed.path
+
+if os.name == "nt" and db_url.startswith("sqlite:///"):
+    if db_path.startswith("//"):
+        db_path = db_path.lstrip("/")  # removes one or two leading slashes
+
+# if os.path.exists(db_path):
+#    print("✅ SQLite database found.")
+#else:
+#    print("❌ SQLite database does not exist on disk:", db_path)
+   # exit(1)
 engine = create_engine(db_url, echo=False)
 SessionLocal = sessionmaker(bind=engine)
 
@@ -62,3 +78,6 @@ def get_db():
 def init_db():
     Base.metadata.create_all(engine)
     print("Database and tables created!")
+
+if __name__ == "__main__":
+    print("model.py run directly")

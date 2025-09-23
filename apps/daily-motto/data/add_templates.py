@@ -1,5 +1,5 @@
 
-from src.daily_motto.models import get_db, ReminderTemplate
+from daily_motto.models import get_db, ReminderTemplate
 
 template_text = (
     "Generate a short daily motivational reminder for work and fitness, "
